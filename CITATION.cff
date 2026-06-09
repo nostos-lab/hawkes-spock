@@ -1,0 +1,65 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Structural Non-Identifiability of Power-Law Hawkes Processes: A Reproduction Audit of the Spock Retweet Cascade"
+abstract: >-
+  Code and frozen result artifacts for the reproduction audit of the marked
+  power-law Hawkes fit on the Spock retweet cascade (Rizoiu et al. 2017),
+  separating implementation validity from model identifiability through
+  exponential and power-law Hawkes kernel synthetic recovery, a
+  Hardiman-Bouchaud cross-check on the Spock cascade, and a constraint-faithful
+  reproduction on the ACTIVE dataset. The power-law Hawkes kernel is shown to
+  be structurally non-identifiable in the social-media cascade regime, and the
+  reported subcritical branching ratio is determined jointly by the estimation
+  constraint and the mark-distribution assumption rather than by the data
+  alone.
+type: software
+version: "1.0.0"
+date-released: "2026-06-10"
+license: MIT
+authors:
+  - family-names: "Lee"
+    given-names: "Jihyeong"
+    affiliation: "Nostos"
+    orcid: "https://orcid.org/0009-0006-2028-8867"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20615710"
+    description: "Zenodo archive of this release"
+repository-code: "https://github.com/nostos-lab/hawkes-spock"
+keywords:
+  - Hawkes process
+  - self-exciting point process
+  - branching ratio
+  - non-identifiability
+  - power-law kernel
+  - reproducibility
+  - social media cascade
+references:
+  - type: article
+    authors:
+      - family-names: "Rizoiu"
+        given-names: "Marian-Andrei"
+      - family-names: "Xie"
+        given-names: "Lexing"
+      - family-names: "Sanner"
+        given-names: "Scott"
+      - family-names: "Cebrian"
+        given-names: "Manuel"
+      - family-names: "Yu"
+        given-names: "Honglin"
+      - family-names: "Van Hentenryck"
+        given-names: "Pascal"
+    title: "Expecting to be HIP: Hawkes Intensity Processes for Social Media Popularity"
+    year: 2017
+    doi: "10.1145/3038912.3052650"
+  - type: article
+    authors:
+      - family-names: "Mishra"
+        given-names: "Swapnil"
+      - family-names: "Rizoiu"
+        given-names: "Marian-Andrei"
+      - family-names: "Xie"
+        given-names: "Lexing"
+    title: "Feature Driven and Point Process Approaches for Popularity Prediction"
+    year: 2016
+    doi: "10.1145/2983323.2983812"

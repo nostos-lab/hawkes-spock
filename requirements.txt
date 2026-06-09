@@ -1,0 +1,9 @@
+# Core runtime — required for both notebooks and the `hawkes` toolkit.
+numpy>=1.26
+scipy>=1.11
+pandas>=2.0
+matplotlib>=3.7
+
+# Notebook execution
+jupyter>=1.0
+ipykernel>=6.25
