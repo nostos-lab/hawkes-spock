@@ -13,13 +13,13 @@ abstract: >-
   constraint and the mark-distribution assumption rather than by the data
   alone.
 type: software
-version: "1.1.0"
+version: "1.2.0"
 date-released: "2026-06-10"
 license: MIT
 authors:
   - family-names: "Lee"
-    given-names: "Jihyeong"
-    affiliation: "Nostos"
+    given-names: "Jihyung"
+    affiliation: "Nostos (Independent Researcher)"
     orcid: "https://orcid.org/0009-0006-2028-8867"
 identifiers:
   - type: doi
