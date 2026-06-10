@@ -82,50 +82,6 @@ def fit_multi_start(nll_fn: Callable,
 
 # ----- Initial-point samplers -----
 
-def sample_init_unmarked(rng: np.random.Generator) -> np.ndarray:
-    """mu ~ LogU(0.01, 5), alpha ~ LogU(0.1, 1000), delta ~ LogU(0.1, 1000), eta ~ U(0.5, 3.0)."""
-    mu = 10.0 ** rng.uniform(np.log10(0.01), np.log10(5.0))
-    alpha = 10.0 ** rng.uniform(np.log10(0.1), np.log10(1000.0))
-    delta = 10.0 ** rng.uniform(np.log10(0.1), np.log10(1000.0))
-    eta = rng.uniform(0.5, 3.0)
-    return np.array([mu, alpha, delta, eta])
-
-
-def sample_init_marked_fixed_beta(rng: np.random.Generator) -> np.ndarray:
-    """[mu, kappa, c, theta] for beta-fixed marked Hawkes."""
-    mu = 10.0 ** rng.uniform(np.log10(0.01), np.log10(5.0))
-    kappa = 10.0 ** rng.uniform(-3.0, 1.0)
-    c = 10.0 ** rng.uniform(np.log10(0.5), np.log10(2000.0))
-    theta = rng.uniform(0.3, 3.0)
-    return np.array([mu, kappa, c, theta])
-
-
-def sample_init_unmarked_exp(rng: np.random.Generator) -> np.ndarray:
-    """[mu, alpha, delta] for stationary exponential Hawkes. n_star = alpha / delta."""
-    mu = 10.0 ** rng.uniform(np.log10(0.01), np.log10(5.0))
-    alpha = 10.0 ** rng.uniform(np.log10(0.01), np.log10(10.0))
-    delta = 10.0 ** rng.uniform(np.log10(0.05), np.log10(10.0))
-    return np.array([mu, alpha, delta])
-
-
-def sample_init_cascade_exp(rng: np.random.Generator) -> np.ndarray:
-    """[alpha, delta] for cascade exponential Hawkes (mu = 0). n_star = alpha / delta."""
-    delta = 10.0 ** rng.uniform(-5.0, -1.0)
-    n_star_init = rng.uniform(0.1, 0.95)
-    alpha = n_star_init * delta
-    return np.array([alpha, delta])
-
-
-def sample_init_cascade_exp_piecewise_mu(rng: np.random.Generator,
-                                          K: int = 3) -> np.ndarray:
-    """[mu_0, ..., mu_{K-1}, alpha, beta] for piecewise-mu cascade exponential Hawkes."""
-    mus = 10.0 ** rng.uniform(-5.0, -1.0, size=K)
-    delta = 10.0 ** rng.uniform(-5.0, -1.0)
-    n_star_init = rng.uniform(0.1, 0.95)
-    alpha = n_star_init * delta
-    return np.concatenate([mus, [alpha, delta]])
-
-
 def sample_init_marked_free_beta(rng: np.random.Generator) -> np.ndarray:
     """[mu, kappa, beta, c, theta] for beta-free marked Hawkes."""
     mu = 10.0 ** rng.uniform(np.log10(0.01), np.log10(5.0))
@@ -134,3 +90,11 @@ def sample_init_marked_free_beta(rng: np.random.Generator) -> np.ndarray:
     c = 10.0 ** rng.uniform(np.log10(0.5), np.log10(2000.0))
     theta = rng.uniform(0.3, 3.0)
     return np.array([mu, kappa, beta, c, theta])
+
+def sample_init_cascade_marked(rng):
+    """[κ, β, c, θ] for cascade marked Hawkes (μ=0)."""
+    kappa = 10.0 ** rng.uniform(-2.0, 1.0)
+    beta  = rng.uniform(0.1, 3.0)
+    c     = 10.0 ** rng.uniform(0.0, np.log10(5000.0))
+    theta = rng.uniform(0.05, 3.0)
+    return np.array([kappa, beta, c, theta])
