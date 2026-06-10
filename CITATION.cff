@@ -13,7 +13,7 @@ abstract: >-
   constraint and the mark-distribution assumption rather than by the data
   alone.
 type: software
-version: "1.0.0"
+version: "1.1.0"
 date-released: "2026-06-10"
 license: MIT
 authors:
@@ -41,17 +41,13 @@ references:
         given-names: "Marian-Andrei"
       - family-names: "Xie"
         given-names: "Lexing"
-      - family-names: "Sanner"
-        given-names: "Scott"
-      - family-names: "Cebrian"
-        given-names: "Manuel"
-      - family-names: "Yu"
-        given-names: "Honglin"
-      - family-names: "Van Hentenryck"
-        given-names: "Pascal"
-    title: "Expecting to be HIP: Hawkes Intensity Processes for Social Media Popularity"
+      - family-names: "Mishra"
+        given-names: "Swapnil"
+      - family-names: "Lee"
+        given-names: "Young"
+    title: "A Tutorial on Hawkes Processes for Events in Social Media"
     year: 2017
-    doi: "10.1145/3038912.3052650"
+    doi: "10.48550/arXiv.1708.06401"
   - type: article
     authors:
       - family-names: "Mishra"
