@@ -57,11 +57,14 @@ constraint-faithful reproduction on the ACTIVE dataset.
 ## What this release demonstrates
 
 1. **The reported value is not recovered by a free fit.** A multi-start
-   unconstrained L-BFGS-B MLE on the Spock cascade escapes the reported
-   parameters: the unmarked plug-in `n* ~ 1.19` while the published value is
-   `n* = 0.92`. The likelihood is flat along a parameter ridge — five
-   near-identical fits (ΔNLL = 0.17) span the kernel scale over six orders of
-   magnitude.
+   unconstrained L-BFGS-B MLE on the Spock cascade (cascade marked power-law,
+   μ = 0, matching Rizoiu et al.) does not recover the reported parameters: it
+   moves along a flat likelihood ridge to a parameter vector unrelated to the
+   reported one (κ at its bound, large θ), giving a supercritical plug-in
+   `n* ≈ 1.19` while the published value is `n* = 0.92`. Five near-identical
+   fits (ΔNLL ≈ 0.04) span the kernel scale κ over six orders of magnitude, so
+   κ is not identified; the implied branching ratios stay supercritical
+   (1.19–1.24) across the ridge.
 
 2. **Implementation vs. model separation.**
    * **Exponential kernel synthetic recovery** (`n* = 0.3 / 0.7 / 0.9`) confirms
@@ -76,10 +79,10 @@ constraint-faithful reproduction on the ACTIVE dataset.
      across all observed window widths (0.51–0.88), a path independent of the
      likelihood ridge.
    * **ACTIVE faithful-constraint check** (80 cascades) — faithfully
-     reproducing the `n* < 1` constraint of Mishra *et al.* (2016) keeps 94 %
-     subcritical, yet ~44 % pile up at the constraint boundary (`n* ≈ 0.92`),
+     reproducing the `n* < 1` constraint of Mishra *et al.* (2016) keeps 91 %
+     subcritical, yet ~46 % pile up at the constraint boundary (`n* ≈ 0.92`),
      and the empirical mark exponent (median 1.18) mismatches the assumed
-     `α = 2.016`, voiding the closed form in 54 % of cascades.
+     `α = 2.016`, voiding the closed form in 55 % of cascades.
 
 3. **Conclusion.** The power-law Hawkes kernel is structurally
    non-identifiable in the regime relevant to social-media cascades; the
@@ -144,14 +147,12 @@ datasets listed under [Data](#data), their upstream terms (GPLv3 / CC BY-NC
 If you build on this work, please cite the upstream Hawkes-process literature
 that the reproduction targets:
 
-* Rizoiu, M.-A. *et al.* (2017). *Expecting to be HIP: Hawkes Intensity
-  Processes for Social Media Popularity.* WWW '17.
-  doi:[10.1145/3038912.3052650](https://doi.org/10.1145/3038912.3052650)
-* Mishra, S., Rizoiu, M.-A. & Xie, L. (2016). *Feature Driven and Point
-  Process Approaches for Popularity Prediction.* CIKM 2016.
+* Rizoiu, M.-A., Lee, Y., Mishra, S. & Xie, L. (2017). *A Tutorial on Hawkes
+  Processes for Events in Social Media.* arXiv:1708.06401. (The Spock worked
+  example and the marked power-law Hawkes fit reproduced here.)
+* Mishra, S., Rizoiu, M.-A. & Xie, L. (2016). *Feature Driven and Point Process Approaches for Popularity Prediction.* CIKM 2016.
   doi:[10.1145/2983323.2983812](https://doi.org/10.1145/2983323.2983812)
 * Filimonov, V. & Sornette, D. (2015). *Apparent criticality and calibration
   issues in the Hawkes self-excited point process model.* Quantitative Finance,
   15(8), 1293–1314.
-* Hardiman, S. J. & Bouchaud, J.-P. (2014). *Branching-ratio approximation for
-  the self-exciting Hawkes process.* Physical Review E, 90, 062807.
+* Hardiman, S. J. & Bouchaud, J.-P. (2014). *Branching-ratio approximation for the self-exciting Hawkes process.* Physical Review E, 90, 062807.
