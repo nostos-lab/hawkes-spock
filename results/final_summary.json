@@ -1,20 +1,19 @@
 {
   "dataset": "Spock retweet cascade (Rizoiu et al. 2017) + ACTIVE (Mishra et al. 2016)",
-  "frozen_on": "2026-06-10",
+  "frozen_on": "2026-06-17",
   "spock": {
     "N_total": 219,
     "N_obs": 43,
     "free_mle": {
+      "model": "seed-excluded mu=0 cascade, params [kappa, beta, c, theta]",
       "params": [
-        0.028050928190923606,
-        10000.0,
-        2.1497962149752223,
-        673.5698387644142,
-        4.248452884400843
+        75947.94739444437,
+        2.583834869937667,
+        1277.689666552214,
+        4.690829359901154
       ],
-      "nll": 151.43792985611063,
-      "n_star_plugin_unmarked": 0.6565220049694999,
-      "n_star_plugin_marked": 0.6565220049694999
+      "nll": 147.33860649385895,
+      "n_star_plugin_marked": 1.1805644303996303
     },
     "constrained_mle": {
       "params": [
