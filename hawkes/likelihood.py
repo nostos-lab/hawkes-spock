@@ -207,3 +207,33 @@ def nll_marked_powerlaw_fixed_beta(params4: np.ndarray, times: np.ndarray,
     mu, kappa, c, theta = params4
     return nll_marked_powerlaw(np.array([mu, kappa, beta_fixed, c, theta]),
                                 times, marks, T)
+
+def nll_marked_powerlaw_cascade(params: np.ndarray, times: np.ndarray,
+                                marks: np.ndarray, T: float) -> float:
+    """Negative log-likelihood of the marked power-law Hawkes CASCADE model (§3.2):
+    exogenous seed at times[0], background mu=0, seed excluded from the log-sum.
+    Matches Rizoiu/Mishra marked_hawkes.R neg.log.likelihood (sum over time[-1], no
+    background rate) and faithful_constraint._nll_marked_powerlaw (verified identical,
+    NLL diff ~1e-14). Differs from nll_marked_powerlaw, which keeps log(mu) for the
+    seed and fits mu>0 — that one does NOT implement the §3.2 cascade model.
+    params = [kappa, beta, c, theta], all > 0.
+    """
+    K, beta, c, theta = params
+    if K <= 0 or c <= 0 or theta <= 0 or beta < 0:
+        return 1e12
+    with np.errstate(over="ignore", invalid="ignore", divide="ignore"):
+        mb = marks ** beta
+        if not np.all(np.isfinite(mb)):
+            return 1e12
+        comp = K * np.sum(mb * (1.0 / (theta * c ** theta)
+                                - 1.0 / (theta * (T + c - times) ** theta)))
+        if not np.isfinite(comp):
+            return 1e12
+        dt = times[:, None] - times[None, :] + c
+        W = np.tril(dt ** (-(1.0 + theta)), k=-1)
+        lam = (K * (W * mb[None, :]).sum(axis=1))[1:]   # [1:] excludes the seed
+        if np.any(lam <= 0) or not np.all(np.isfinite(lam)):
+            return 1e12
+        ll = np.sum(np.log(lam))
+    val = comp - ll
+    return val if np.isfinite(val) else 1e12
