@@ -1,36 +1,40 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
-title: "Structural Non-Identifiability of Power-Law Hawkes Processes: A Reproduction Audit of the Spock Retweet Cascade"
+title: "Assumption-Dependence of the Branching Ratio in a Power-Law Hawkes Cascade: A Reproduction Audit"
 abstract: >-
-  Code and frozen result artifacts for the reproduction audit of the marked
-  power-law Hawkes fit on the Spock retweet cascade (Rizoiu et al. 2017),
-  separating implementation validity from model identifiability through
-  exponential and power-law Hawkes kernel synthetic recovery, a
-  Hardiman-Bouchaud cross-check on the Spock cascade, and a constraint-faithful
-  reproduction on the ACTIVE dataset. The power-law Hawkes kernel is shown to
-  be structurally non-identifiable in the social-media cascade regime, and the
-  reported subcritical branching ratio is determined jointly by the estimation
-  constraint and the mark-distribution assumption rather than by the data
-  alone.
+  Code and frozen result artifacts for a reproduction audit of the marked
+  power-law Hawkes fit reported for the "Spock" retweet cascade (Rizoiu et al.
+  2017). Re-estimating the model under the seed-excluded, zero-background
+  specification that the example defines, the reported subcritical branching
+  ratio (n* = 0.92) is found to be determined by estimation assumptions rather
+  than by the cascade data: an imposed n* < 1 constraint, the validity window
+  beta < alpha - 1 of the closed-form branching ratio, and the assumed Pareto
+  exponent of the marks each control the subcritical-versus-supercritical
+  verdict independently. The underlying mechanism is a non-identifiability of
+  the kernel scale, characterized through the profile likelihood and the Fisher
+  information, and cross-checked against synthetic recovery with known ground
+  truth, a Hardiman-Bouchaud estimator, and a constraint-faithful reproduction
+  on the ACTIVE dataset.
 type: software
-version: "1.0.0"
-date-released: "2026-06-10"
+version: "1.2.0"
+date-released: "2026-06-17"
 license: MIT
 authors:
   - family-names: "Lee"
-    given-names: "Jihyeong"
+    given-names: "Jihyung"
     affiliation: "Nostos"
     orcid: "https://orcid.org/0009-0006-2028-8867"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20615710"
-    description: "Zenodo archive of this release"
+    description: "Zenodo concept DOI (all versions of the code release)"
 repository-code: "https://github.com/nostos-lab/hawkes-spock"
 keywords:
   - Hawkes process
   - self-exciting point process
   - branching ratio
   - non-identifiability
+  - assumption dependence
   - power-law kernel
   - reproducibility
   - social media cascade
@@ -39,19 +43,15 @@ references:
     authors:
       - family-names: "Rizoiu"
         given-names: "Marian-Andrei"
+      - family-names: "Lee"
+        given-names: "Young"
+      - family-names: "Mishra"
+        given-names: "Swapnil"
       - family-names: "Xie"
         given-names: "Lexing"
-      - family-names: "Sanner"
-        given-names: "Scott"
-      - family-names: "Cebrian"
-        given-names: "Manuel"
-      - family-names: "Yu"
-        given-names: "Honglin"
-      - family-names: "Van Hentenryck"
-        given-names: "Pascal"
-    title: "Expecting to be HIP: Hawkes Intensity Processes for Social Media Popularity"
+    title: "A Tutorial on Hawkes Processes for Events in Social Media"
     year: 2017
-    doi: "10.1145/3038912.3052650"
+    notes: "arXiv:1708.06401. The worked Spock example audited by this software."
   - type: article
     authors:
       - family-names: "Mishra"
@@ -63,3 +63,4 @@ references:
     title: "Feature Driven and Point Process Approaches for Popularity Prediction"
     year: 2016
     doi: "10.1145/2983323.2983812"
+    notes: "CIKM 2016. Source of the closed-form branching-ratio expression and the n* < 1 constraint."
