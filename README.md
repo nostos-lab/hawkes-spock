@@ -1,14 +1,18 @@
-# Structural Non-Identifiability of Power-Law Hawkes Processes — A Reproduction Audit of the Spock Retweet Cascade
+# Assumption-Dependence of the Branching Ratio in a Power-Law Hawkes Cascade — A Reproduction Audit
 
 [![DOI](https://zenodo.org/badge/1264160587.svg)](https://doi.org/10.5281/zenodo.20615710)
 
-Code and frozen result artifacts for the reproduction audit of the marked
-power-law Hawkes fit on the "Spock" retweet cascade (Rizoiu *et al.* 2017),
-together with the synthetic recovery and cross-validation experiments that
-separate *implementation validity* from *model identifiability*: exponential
-and power-law Hawkes kernel recovery on synthetic data with known ground
-truth, a Hardiman–Bouchaud cross-check on the Spock cascade, and a
-constraint-faithful reproduction on the ACTIVE dataset.
+Code and frozen result artifacts for a reproduction audit of the marked
+power-law Hawkes fit reported for the "Spock" retweet cascade (Rizoiu *et al.*
+2017). Re-estimating the model under the seed-excluded, zero-background
+specification that the worked example defines, the reported subcritical
+branching ratio (`n* = 0.92`) is found to be determined by estimation
+assumptions rather than by the cascade data. The release also includes the
+synthetic recovery and cross-validation experiments that separate
+*implementation validity* from *model identifiability*: exponential and
+power-law Hawkes kernel recovery on synthetic data with known ground truth, a
+Hardiman–Bouchaud cross-check on the Spock cascade, and a constraint-faithful
+reproduction on the ACTIVE dataset.
 
 > **Data is not redistributed in this repository.** The analyses consume one
 > external CSV (`example_book.csv`) and the ACTIVE dataset, both from the
@@ -30,7 +34,7 @@ constraint-faithful reproduction on the ACTIVE dataset.
 │   ├── __init__.py
 │   ├── kernels.py                  # phi(tau), n* closed-forms, log-normal mark helpers
 │   ├── simulate.py                 # Ogata thinning simulators (unmarked / marked / exp)
-│   ├── likelihood.py               # negative log-likelihoods (power-law, exp, cascade)
+│   ├── likelihood.py               # negative log-likelihoods (power-law, exp, cascade mu=0)
 │   ├── mle.py                      # multi-start L-BFGS-B wrapper + init samplers
 │   ├── diagnostics.py              # time-rescaling residuals + Hardiman–Bouchaud
 │   └── faithful_constraint.py      # Mishra-closed-form constrained MLE (SLSQP n*<1)
@@ -38,12 +42,15 @@ constraint-faithful reproduction on the ACTIVE dataset.
 ├── notebooks/
 │   └── main.ipynb                  # single notebook reproducing every result and figure
 │
+├── scripts/
+│   └── verify_against_rizoiu.R     # R cross-check: our cascade NLL vs marked_hawkes.R
+│
 ├── data/
 │   └── README.md                   # how to obtain example_book.csv and ACTIVE (NOT redistributed)
 │
 └── results/
     ├── README.md                   # describes every artifact below
-    ├── spock_fit.json              # free-MLE fit on Spock + top-5 ridge fits
+    ├── spock_fit.json              # free-MLE fit on Spock + top-5 ridge fits (4-param cascade)
     ├── final_summary.json          # aggregated verdict across all experiments
     ├── phase0_E{1,2,3}_results.json  # exponential kernel synthetic recovery
     ├── phase1_R{1,2,3}_results.json  # unmarked power-law synthetic recovery
@@ -51,22 +58,37 @@ constraint-faithful reproduction on the ACTIVE dataset.
     ├── active80_faithful.json      # ACTIVE 80-cascade faithful-constraint fits
     ├── diag2_alpha.json            # per-cascade Hill mark-distribution exponent
     ├── hb_spock.json               # Hardiman–Bouchaud Δt sweep on Spock
-    └── fig0N_*.png                 # nine figures referenced by the paper
+    └── fig{01..10}_*.png           # ten figures referenced by the paper
 ```
 
 ## What this release demonstrates
 
-1. **The reported value is not recovered by a free fit.** A multi-start
-   unconstrained L-BFGS-B MLE on the Spock cascade (cascade marked power-law,
-   μ = 0, matching Rizoiu et al.) does not recover the reported parameters: it
-   moves along a flat likelihood ridge to a parameter vector unrelated to the
-   reported one (κ at its bound, large θ), giving a supercritical plug-in
-   `n* ≈ 1.19` while the published value is `n* = 0.92`. Five near-identical
-   fits (ΔNLL ≈ 0.04) span the kernel scale κ over six orders of magnitude, so
-   κ is not identified; the implied branching ratios stay supercritical
-   (1.19–1.24) across the ridge.
+1. **The reported value is a product of estimation assumptions, not the data.**
+   Re-fitting the Spock cascade under the seed-excluded, `mu = 0` cascade
+   likelihood that the example text specifies, three assumptions each control
+   the subcritical-versus-supercritical verdict independently:
+   * the imposed `n* < 1` constraint — the constrained fit reproduces the
+     reported `n* = 0.92` (closed-form, Pareto `α = 2.016`), but removing the
+     constraint lowers the negative log-likelihood (148.11 → 147.34);
+   * the validity window `β < α − 1 = 1.016` of the closed-form ratio — the
+     unconstrained fit lands at `β = 2.58`, where the closed-form ratio is
+     undefined, and this holds across the entire non-identified ridge;
+   * the assumed mark distribution — at the *same* constrained parameters,
+     replacing the Pareto exponent with the empirical mark moment moves `n*`
+     from 0.92 (subcritical) to 1.28 (supercritical), a factor of 1.38.
 
-2. **Implementation vs. model separation.**
+2. **The mechanism is non-identifiability of the kernel scale `κ`.**
+   * **Profile likelihood** — fixing `κ` across six decades (`10²–10⁸`) and
+     re-optimizing `(β, c, θ)` leaves the NLL flat to within `ΔNLL ≤ 0.012`;
+     `κ` is matched at essentially equal likelihood by a compensating
+     `(β, c, θ)`. On the plug-in mark scale the profiled region stays
+     supercritical throughout (`n* ≈ 1.17–1.20`).
+   * **Fisher information** — at the unconstrained optimum the 4×4 observed
+     Fisher has condition number `≈ 1.2 × 10¹⁵`, and the eigenvector of its
+     smallest eigenvalue is aligned with the `κ` axis (`κ` component `≈ 1.0`,
+     others `≤ 10⁻⁴`). `κ` is non-identified; `(β, c, θ)` are identified.
+
+3. **Implementation vs. model separation.**
    * **Exponential kernel synthetic recovery** (`n* = 0.3 / 0.7 / 0.9`) confirms
      the likelihood / multi-start / time-rescaling code recovers ground truth.
    * **Unmarked power-law synthetic recovery** at the same regimes — the
@@ -84,12 +106,14 @@ constraint-faithful reproduction on the ACTIVE dataset.
      and the empirical mark exponent (median 1.18) mismatches the assumed
      `α = 2.016`, voiding the closed form in 55 % of cascades.
 
-3. **Conclusion.** The power-law Hawkes kernel is structurally
-   non-identifiable in the regime relevant to social-media cascades; the
-   reported subcritical branching ratio is determined jointly by the
-   estimation constraint and the mark-distribution assumption rather than by
-   the data alone. Non-identifiability is a property of the kernel, not of
-   the data domain.
+4. **Conclusion.** The reported subcritical branching ratio of this cascade is
+   selected by the estimation assumptions — the `n* < 1` constraint, the
+   `β < α − 1` validity window, and the Pareto mark exponent — rather than
+   determined by the data alone; the underlying mechanism is the
+   non-identifiability of the kernel scale. The generalization claim is that
+   branching-ratio criticality claims for power-law Hawkes cascades require the
+   identifiability of the relevant parameters to be checked, not that every
+   cascade is supercritical.
 
 ## Data
 
@@ -121,6 +145,13 @@ cd notebooks
 jupyter nbconvert --to notebook --execute main.ipynb --output main.ipynb
 ```
 
+Optionally, cross-check the Python cascade likelihood against the original
+authors' R implementation (requires R and the upstream `marked_hawkes.R`):
+
+```bash
+Rscript scripts/verify_against_rizoiu.R data/example_book.csv path/to/marked_hawkes.R
+```
+
 **Paths.** The notebook reads the Spock CSV from a `DATA_PATH` variable and
 the ACTIVE CSV from an `ACTIVE_CSV` variable, and writes figures and JSON to
 a `RESULTS_DIR`. The defaults already point to `../data/` and `../results/`,
@@ -148,11 +179,15 @@ If you build on this work, please cite the upstream Hawkes-process literature
 that the reproduction targets:
 
 * Rizoiu, M.-A., Lee, Y., Mishra, S. & Xie, L. (2017). *A Tutorial on Hawkes
-  Processes for Events in Social Media.* arXiv:1708.06401. (The Spock worked
-  example and the marked power-law Hawkes fit reproduced here.)
-* Mishra, S., Rizoiu, M.-A. & Xie, L. (2016). *Feature Driven and Point Process Approaches for Popularity Prediction.* CIKM 2016.
+  Processes for Events in Social Media.* arXiv:1708.06401. (The worked Spock
+  example audited here.)
+* Mishra, S., Rizoiu, M.-A. & Xie, L. (2016). *Feature Driven and Point
+  Process Approaches for Popularity Prediction.* CIKM 2016.
   doi:[10.1145/2983323.2983812](https://doi.org/10.1145/2983323.2983812)
+  (Source of the closed-form branching-ratio expression and the `n* < 1`
+  constraint.)
 * Filimonov, V. & Sornette, D. (2015). *Apparent criticality and calibration
   issues in the Hawkes self-excited point process model.* Quantitative Finance,
   15(8), 1293–1314.
-* Hardiman, S. J. & Bouchaud, J.-P. (2014). *Branching-ratio approximation for the self-exciting Hawkes process.* Physical Review E, 90, 062807.
+* Hardiman, S. J. & Bouchaud, J.-P. (2014). *Branching-ratio approximation for
+  the self-exciting Hawkes process.* Physical Review E, 90, 062807.
